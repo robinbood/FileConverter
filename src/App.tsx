@@ -58,28 +58,15 @@ function App() {
   const converter  = () => {
     if (json) {
       const jsonData = JSON.parse(json);
-      const csvData = jsonData.map((row: string) => Object.values(row).join(',')).join('\n');
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
+      const  csvData = jsonData .map( row => Object.values(row).join(',')).join('\n');
+      const csvBlob = new Blob([csvData], { type: 'text/csv' });
+      const csvUrl = URL.createObjectURL(csvBlob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = csvUrl;
       a.download = 'data.csv';
       a.click();
-    } else if (csv) {
-      const csvData = csv.split('\n').map(row => row.split(','));
-      const jsonData = csvData.map((row) => {
-        return row.reduce((acc: any, value: any, index: number) => {
-          acc[`column${index + 1}`] = value;
-          return acc;
-        }, {});
-      });
-      const blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'data.json';
-      a.click();
-    } 
+      URL.revokeObjectURL(csvUrl);
+    }
   }
   return (
     <div>
